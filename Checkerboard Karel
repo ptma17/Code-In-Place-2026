@@ -1,0 +1,80 @@
+from karel.stanfordkarel import *
+
+"""
+Karel should fill the whole world with beepers.
+Karel uses a zig-zag algorithm 
+"""
+
+
+def main():
+    """
+    Karel checks if Karel can proceed onto the next row 
+    or move forward *twice* before putting down each beeper.
+    Since if Karel checks that no beepers are present
+    and puts down one every single time Karel moves, 
+    Karel will not create a checkerboard pattern.
+    """
+    while no_beepers_present():
+        put_beeper()
+        for i in range(2):
+            if front_is_clear():
+                move()
+            else:
+                proceed_to_next_row_or_go_home()
+
+
+def proceed_to_next_row_or_go_home():
+    """
+		This determines whether Karel can move onto the 
+    upper row and begins layering the checkerboard pattern
+    or to go home (which is Karel's starting position) from 
+    either the upper-left or the upper-right corner of the world.
+		"""
+
+    if facing_east():   # This checks if Karel is at the upper-right corner of the world.
+        turn_left()
+        if front_is_clear():
+            move()
+            turn_left()
+        else: 
+            go_home_from_upper_right_corner()
+    else: 
+        if facing_west():   # This checks if Karel is at the upper-left corner of the world.
+            turn_right()    
+            if front_is_clear():
+                move()
+                turn_right()
+            else:
+                go_home_from_upper_left_corner()
+        if facing_south():
+            turn_left()
+
+def go_home_from_upper_right_corner():
+    turn_around()
+    move_to_the_end()
+    turn_right()
+    move_to_the_end()
+    turn_left()
+
+def go_home_from_upper_left_corner():
+    turn_around()
+    move_to_the_end()
+    turn_left()
+
+def move_to_the_end():  # Karel moves forward until Karel is blocked. 
+    while front_is_clear():
+        move()
+
+def turn_around():
+    for i in range(2):
+        turn_left()
+
+def turn_right():
+    for i in range(3):
+        turn_left()
+
+
+
+# There is no need to edit code beyond this point
+if __name__ == '__main__':
+    main()
